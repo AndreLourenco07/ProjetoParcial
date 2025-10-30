@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="32dp"
+        tools:context=".AdicionarListaActivity">
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adicionar lista"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Campo Nome da lista -->
+        <EditText
+            android:id="@+id/nomeLista"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_edit_background"
+            android:hint="Digite o nome da lista"
+            android:inputType="text"
+            android:padding="12dp"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Label Imagem -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Imagem"
+            android:textSize="14sp"
+            android:textColor="@color/cinza"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Card para selecionar imagem -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewImagem"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:cardCornerRadius="8dp"
+            app:cardElevation="2dp"
+            android:layout_marginBottom="24dp"
+            android:foreground="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/cinzaclaro">
+
+                <!-- Ícone de imagem -->
+                <ImageView
+                    android:id="@+id/imageViewPreview"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:src="@android:drawable/ic_menu_gallery"
+                    android:layout_centerInParent="true"
+                    android:contentDescription="Selecionar imagem"
+                    app:tint="#757575" />
+
+                <!-- Botão de câmera (sobreposto) -->
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabCamera"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_margin="16dp"
+                    android:src="@android:drawable/ic_menu_camera"
+                    app:fabSize="mini"
+                    app:tint="@color/cinzaclaro"
+                    app:backgroundTint="@color/system"
+                    android:contentDescription="Tirar foto" />
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <!-- Botão Adicionar -->
+        <Button
+            android:id="@+id/buttonAdicionar"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Adicionar"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:backgroundTint="@color/system"
+            app:cornerRadius="8dp"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+</ScrollView>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:fillViewport="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Título -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Adicionar item"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="@color/black"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Label Nome -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="nome"
+            android:textSize="12sp"
+            android:textColor="@color/cinza"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Campo Nome do Item -->
+        <EditText
+            android:id="@+id/etNomeItem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Nome do item"
+            android:padding="12dp"
+            android:background="@drawable/ic_edit_background"
+            android:textSize="16sp"
+            android:inputType="text"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Label Quantidade -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="quantidade"
+            android:textSize="12sp"
+            android:textColor="@color/cinza"
+            android:layout_marginBottom="4dp" />
+
+        <!-- Layout Horizontal para Quantidade e Unidade -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="16dp">
+
+            <!-- Campo Quantidade -->
+            <EditText
+                android:id="@+id/etQuantidade"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="123"
+                android:padding="12dp"
+                android:background="@drawable/ic_edit_background"
+                android:textSize="16sp"
+                android:inputType="number"
+                android:layout_marginEnd="8dp" />
+
+            <!-- Spinner Unidade -->
+            <Spinner
+                android:id="@+id/spinnerUnidade"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="12dp"
+                android:background="@drawable/ic_spinner_background"
+                android:entries="@array/unidades" />
+
+        </LinearLayout>
+
+        <!-- Label Categoria -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="categoria"
+            android:textSize="12sp"
+            android:textColor="@color/cinza"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Spinner Categoria -->
+        <Spinner
+            android:id="@+id/spinnerCategoria"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="@drawable/ic_spinner_background"
+            android:entries="@array/categorias"
+            android:layout_marginBottom="24dp" />
+
+        <!-- Espaço flexível -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <!-- Botão Adicionar -->
+        <Button
+            android:id="@+id/btnAdicionar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Adicionar"
+            android:textColor="@color/white"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:background="@drawable/ic_button_acessar"
+            android:padding="16dp"
+            android:layout_marginTop="16dp" />
+
+    </LinearLayout>
+
+</ScrollView>

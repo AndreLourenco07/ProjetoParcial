@@ -33,30 +33,32 @@ class MainActivity : AppCompatActivity() {
             val email = binding.emailInput.text.toString().trim()
             val senha = binding.senhaInput.text.toString().trim()
 
-            when {
-                email.isEmpty() || senha.isEmpty() -> {
-                    Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
-                }
-                !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
-                    Toast.makeText(this, "E-mail inválido!", Toast.LENGTH_SHORT).show()
-                }
-                UsuarioRepository.autenticar(email, senha) -> {
-                    Toast.makeText(this, "Login realizado com sucesso!", Toast.LENGTH_LONG).show()
-
-                    binding.emailInput.setText("")
-                    binding.senhaInput.setText("")
-
-                    // limpa os SharedPreferences após cadastro
-                    val prefs = getSharedPreferences("login_temp", MODE_PRIVATE)
-                    prefs.edit {
-                        clear()   // mesma coisa do clear()
-                    }
-                    // abrir nova tela se quiser
-                }
-                else -> {
-                    Toast.makeText(this, "Não existe nenhuma conta com essas credênciais", Toast.LENGTH_SHORT).show()
-                }
-            }
+            val intent = Intent(this, ListasActivity::class.java)
+            startActivity(intent)
+//            when {
+//                email.isEmpty() || senha.isEmpty() -> {
+//                    Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
+//                }
+//                !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> {
+//                    Toast.makeText(this, "E-mail inválido!", Toast.LENGTH_SHORT).show()
+//                }
+//                UsuarioRepository.autenticar(email, senha) -> {
+//                    val intent = Intent(this, ListasActivity::class.java)
+//                    startActivity(intent)
+//
+//                    binding.emailInput.setText("")
+//                    binding.senhaInput.setText("")
+//
+//                    // limpa os SharedPreferences após cadastro
+//                    val prefs = getSharedPreferences("login_temp", MODE_PRIVATE)
+//                    prefs.edit {
+//                        clear()   // mesma coisa do clear()
+//                    }
+//                }
+//                else -> {
+//                    Toast.makeText(this, "Não existe nenhuma conta com essas credênciais", Toast.LENGTH_SHORT).show()
+//                }
+//            }
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->

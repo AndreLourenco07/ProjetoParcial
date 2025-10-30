@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="unidades">
+        <item>un</item>
+        <item>kg</item>
+        <item>g</item>
+        <item>L</item>
+        <item>mL</item>
+    </string-array>
+
+    <string-array name="categorias">
+        <item>Fruta</item>
+        <item>Verdura</item>
+        <item>Carne</item>
+    </string-array>
+</resources>

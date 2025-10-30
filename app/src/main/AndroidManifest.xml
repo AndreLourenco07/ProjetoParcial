@@ -12,6 +12,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjetoParcial">
         <activity
+            android:name=".AdicionarProdutoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ItensActivity"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".AdicionarListaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListasActivity"
+            android:exported="false" />
+        <activity
             android:name=".CadastroContaActivity"
             android:exported="false" />
         <activity

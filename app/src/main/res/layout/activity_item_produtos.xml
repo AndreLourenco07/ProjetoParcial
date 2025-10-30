@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:background="?attr/selectableItemBackground">
+
+    <!-- Ícone do produto (círculo cinza com ícone) -->
+    <ImageView
+        android:id="@+id/ivIconeProduto"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_icone_produto"
+        android:background="@drawable/ic_circle_background"
+        android:padding="8dp"
+        android:contentDescription="Ícone do produto"
+        android:scaleType="centerInside" />
+
+    <!-- Layout vertical para nome e subtítulo -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginStart="12dp"
+        android:orientation="vertical">
+
+        <!-- Nome do produto -->
+        <TextView
+            android:id="@+id/tvNomeProduto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Banana"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="normal" />
+
+        <!-- Subtítulo (ex: quantidade, categoria) -->
+        <TextView
+            android:id="@+id/tvSubtitulo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="6 unidades"
+            android:textSize="12sp"
+            android:textColor="@color/cinza"
+            android:layout_marginTop="2dp" />
+
+    </LinearLayout>
+
+    <!-- Checkbox -->
+    <CheckBox
+        android:id="@+id/cbConcluido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:buttonTint="@color/cinza" />
+
+</LinearLayout>

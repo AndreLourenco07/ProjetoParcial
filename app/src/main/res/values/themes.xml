@@ -1,9 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ProjetoParcial" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+
+    <!-- Tema base da aplicação -->
+    <style name="Base.Theme.ProjetoParcial" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Cores principais -->
+        <item name="colorPrimary">@color/system</item>
+        <item name="colorPrimaryVariant">@color/cinzaclaro</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
+        <!-- Para compatibilidade com views antigas -->
+        <item name="colorAccent">@color/system</item>
     </style>
 
+    <!-- Tema usado no Manifest -->
     <style name="Theme.ProjetoParcial" parent="Base.Theme.ProjetoParcial" />
+
 </resources>

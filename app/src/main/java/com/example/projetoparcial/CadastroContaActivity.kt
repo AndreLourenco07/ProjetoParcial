@@ -1,5 +1,6 @@
 package com.example.projetoparcial
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -8,10 +9,14 @@ import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.projetoparcial.databinding.ActivityCadastroContaBinding
+import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
 
 class CadastroContaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCadastroContaBinding
+    private lateinit var firebaseAuth: FirebaseAuth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,6 +25,8 @@ class CadastroContaActivity : AppCompatActivity() {
         // ViewBinding para o layout de cadastro
         binding = ActivityCadastroContaBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        firebaseAuth = FirebaseAuth.getInstance()
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -35,10 +42,14 @@ class CadastroContaActivity : AppCompatActivity() {
 
             if (nome.isNotEmpty() && email.isNotEmpty() && senha.isNotEmpty() && confirmaSenha.isNotEmpty()) {
                 if (senha == confirmaSenha) {
-                    val usuario = Usuario(nome, email, senha)
-                    UsuarioRepository.adicionarUsuario(usuario)
-
-                    Toast.makeText(this, "Cadastro realizado!", Toast.LENGTH_SHORT).show()
+                    firebaseAuth.createUserWithEmailAndPassword(email, senha).addOnCompleteListener {
+                        if (it.isSuccessful){
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                        }else{
+                            Snackbar.make(binding.root, it.exception.toString(), Snackbar.LENGTH_SHORT).show()
+                        }
+                    }
 
                     binding.nomeInput.setText("")
                     binding.emailInput.setText("")
@@ -53,10 +64,10 @@ class CadastroContaActivity : AppCompatActivity() {
 
                     finish() // volta pra tela de login
                 } else {
-                    Toast.makeText(this, "As senhas não são iguais!", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "As senhas não são iguais!", Snackbar.LENGTH_SHORT).show()
                 }
             } else {
-                Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Preencha todos os campos!", Snackbar.LENGTH_SHORT).show()
             }
         }
     }

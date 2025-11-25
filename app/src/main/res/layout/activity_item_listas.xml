@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+Este é o layout para um único item na grade da RecyclerView.
+- CardView cria um card com elevação e cantos arredondados, seguindo o Material Design.
+- ImageView mostrará a imagem da lista ou um placeholder.
+- TextView mostrará o título da lista.
+-->
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
-    app:cardCornerRadius="8dp"
+    app:cardCornerRadius="12dp"
     app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:orientation="vertical"
-        android:gravity="center"
-        android:padding="16dp"
-        android:background="@color/cinzaclaro">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
+        <!-- Imagem da lista -->
         <ImageView
-            android:id="@+id/imageViewIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@android:drawable/ic_menu_camera"
-            android:contentDescription="Ícone da lista" />
+            android:id="@+id/imageViewList"
+            android:layout_width="match_parent"
+            android:layout_height="140dp"
+            android:scaleType="centerCrop"
+            android:background="#E0E0E0"
+            tools:srcCompat="@drawable/ic_placeholder_image"
+            android:contentDescription="Imagem da lista"/>
 
+        <!-- Título da lista -->
         <TextView
-            android:id="@+id/textViewNome"
-            android:layout_width="wrap_content"
+            android:id="@+id/textViewListTitle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nome"
-            android:textSize="14sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="8dp"
-            android:maxLines="1"
-            android:ellipsize="end" />
+            android:padding="12dp"
+            android:gravity="center_vertical"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            tools:text="Supermercado" />
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

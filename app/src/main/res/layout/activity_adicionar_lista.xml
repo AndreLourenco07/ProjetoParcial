@@ -29,7 +29,7 @@
 
         <!-- Campo Nome da lista -->
         <EditText
-            android:id="@+id/nomeLista"
+            android:id="@+id/edtNomeLista"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_edit_background"
@@ -67,12 +67,12 @@
                 <!-- Ícone de imagem -->
                 <ImageView
                     android:id="@+id/imageViewPreview"
-                    android:layout_width="64dp"
-                    android:layout_height="64dp"
-                    android:src="@android:drawable/ic_menu_gallery"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/ic_placeholder_image"
                     android:layout_centerInParent="true"
                     android:contentDescription="Selecionar imagem"
-                    app:tint="#757575" />
+                    tools:ignore="MissingConstraints"/>
 
                 <!-- Botão de câmera (sobreposto) -->
                 <com.google.android.material.floatingactionbutton.FloatingActionButton

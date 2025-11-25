@@ -1,7 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.ProjetoParcial" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    <style name="Base.Theme.ProjetoParcial"
+        parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- customizações modo escuro, se quiser -->
     </style>
+
+    <style name="Theme.ProjetoParcial" parent="Base.Theme.ProjetoParcial" />
 </resources>

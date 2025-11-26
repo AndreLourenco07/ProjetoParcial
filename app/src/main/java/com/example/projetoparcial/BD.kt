@@ -6,6 +6,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 
+
 class BD {
     private val db = Firebase.firestore
     private val storage = FirebaseStorage.getInstance().reference
@@ -126,6 +127,116 @@ class BD {
             }
             .addOnFailureListener { e ->
                 Log.e("BD", "Erro ao atualizar lista", e)
+                onErro(e.message ?: "Erro desconhecido")
+            }
+    }
+
+    // -----------------------------
+    // 6) SALVAR ITEM DENTRO DA LISTA (ATUALIZADO)
+    // -----------------------------
+    fun salvarItemNaLista(
+        idLista: String,
+        item: ItemDados,
+        onSucesso: () -> Unit,
+        onErro: (String) -> Unit
+    ) {
+        val dados = hashMapOf(
+            "nome" to item.nome,
+            "quantidade" to item.quantidade,
+            "unidade" to item.unidade,
+            "categoria" to item.categoria,
+            "concluido" to item.concluido  // ← NOVO
+        )
+
+        db.collection("listas")
+            .document(idLista)
+            .collection("itens")
+            .add(dados)
+            .addOnSuccessListener {
+                Log.d("BD", "Item salvo com ID: ${it.id}")
+                onSucesso()
+            }
+            .addOnFailureListener { e ->
+                Log.e("BD", "Erro ao salvar item", e)
+                onErro(e.message ?: "Erro desconhecido")
+            }
+    }
+
+    // -----------------------------
+    // 7) LER ITENS DE UMA LISTA (ATUALIZADO)
+    // -----------------------------
+    fun lerItensLista(
+        idLista: String,
+        onRetorno: (List<ItemDados>) -> Unit
+    ) {
+        db.collection("listas")
+            .document(idLista)
+            .collection("itens")
+            .get()
+            .addOnSuccessListener { resultado ->
+                val itensConvertidos = resultado.documents.map { doc ->
+                    ItemDados(
+                        id = doc.id,
+                        nome = doc.getString("nome") ?: "",
+                        quantidade = doc.getDouble("quantidade") ?: 1.0,
+                        unidade = doc.getString("unidade") ?: "UN",
+                        categoria = doc.getString("categoria") ?: "Outros",
+                        concluido = doc.getBoolean("concluido") ?: false  // ← NOVO
+                    )
+                }
+                onRetorno(itensConvertidos)
+            }
+            .addOnFailureListener { erro ->
+                Log.e("BD", "Erro ao ler itens", erro)
+                onRetorno(emptyList())
+            }
+    }
+
+    // -----------------------------
+    // 8) ATUALIZAR STATUS CONCLUÍDO DO ITEM
+    // -----------------------------
+    fun atualizarStatusItem(
+        idLista: String,
+        idItem: String,
+        concluido: Boolean,
+        onSucesso: () -> Unit,
+        onErro: (String) -> Unit
+    ) {
+        db.collection("listas")
+            .document(idLista)
+            .collection("itens")
+            .document(idItem)
+            .update("concluido", concluido)
+            .addOnSuccessListener {
+                Log.d("BD", "Status atualizado: $concluido")
+                onSucesso()
+            }
+            .addOnFailureListener { e ->
+                Log.e("BD", "Erro ao atualizar status", e)
+                onErro(e.message ?: "Erro desconhecido")
+            }
+    }
+
+    // -----------------------------
+    // 9) REMOVER ITEM DA LISTA
+    // -----------------------------
+    fun removerItemDaLista(
+        idLista: String,
+        idItem: String,
+        onSucesso: () -> Unit,
+        onErro: (String) -> Unit
+    ) {
+        db.collection("listas")
+            .document(idLista)
+            .collection("itens")
+            .document(idItem)
+            .delete()
+            .addOnSuccessListener {
+                Log.d("BD", "Item removido com ID: $idItem")
+                onSucesso()
+            }
+            .addOnFailureListener { e ->
+                Log.e("BD", "Erro ao remover item", e)
                 onErro(e.message ?: "Erro desconhecido")
             }
     }

@@ -43,7 +43,6 @@ class AdapterLista(
             // imagem
             if (!list.imageUrl.isNullOrBlank()) {
                 binding.imageViewList.setImageURI(Uri.parse(list.imageUrl))
-                // se depois quiser, dá pra trocar pra Glide aqui
             } else {
                 binding.imageViewList.setImageResource(R.drawable.ic_placeholder_image)
             }

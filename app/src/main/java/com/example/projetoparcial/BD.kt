@@ -240,4 +240,37 @@ class BD {
                 onErro(e.message ?: "Erro desconhecido")
             }
     }
+
+    // -----------------------------
+    // 5) ATUALIZAR LISTA NO FIRESTORE
+    // -----------------------------
+    fun atualizarItemLista(
+        idLista : String,
+        idItem : String,
+        item: ItemDados,
+        onSucesso: () -> Unit,
+        onErro: (String) -> Unit
+    ) {
+        val dados = hashMapOf(
+            "nome" to item.nome,
+            "quantidade" to item.quantidade,
+            "unidade" to item.unidade,
+            "categoria" to item.categoria,
+            "concluido" to item.concluido  // ← NOVO
+        )
+
+        db.collection("listas")
+            .document(idLista)
+            .collection("itens")
+            .document(idItem)
+            .update(dados as Map<String, Any>)
+            .addOnSuccessListener {
+                Log.d("BD", "Item atualizada com ID: ${idItem} da lista ${idLista}")
+                onSucesso()
+            }
+            .addOnFailureListener { e ->
+                Log.e("BD", "Erro ao atualizar lista", e)
+                onErro(e.message ?: "Erro desconhecido")
+            }
+    }
 }

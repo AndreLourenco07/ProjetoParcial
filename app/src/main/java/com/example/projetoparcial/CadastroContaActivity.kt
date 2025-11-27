@@ -2,7 +2,6 @@ package com.example.projetoparcial
 
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
@@ -10,7 +9,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.projetoparcial.databinding.ActivityCadastroContaBinding
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 
 class CadastroContaActivity : AppCompatActivity() {
@@ -59,10 +57,10 @@ class CadastroContaActivity : AppCompatActivity() {
                     // limpa os SharedPreferences após cadastro
                     val prefs = getSharedPreferences("cadastro_temp", MODE_PRIVATE)
                     prefs.edit {
-                        clear()   // mesma coisa do clear()
+                        clear()
                     }
 
-                    finish() // volta pra tela de login
+                    finish()
                 } else {
                     Snackbar.make(binding.root, "As senhas não são iguais!", Snackbar.LENGTH_SHORT).show()
                 }

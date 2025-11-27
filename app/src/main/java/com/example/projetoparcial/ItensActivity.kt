@@ -1,9 +1,11 @@
 package com.example.projetoparcial
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -20,6 +22,14 @@ class ItensActivity : AppCompatActivity() {
     private var listId = ""
     private var listTitle = ""
     private var imageUri = ""
+
+    private val addOrEditItemLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                // Recarrega as listas do Firestore após adicionar/editar
+                carregarItens()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +63,10 @@ class ItensActivity : AppCompatActivity() {
             intent.putExtra("LIST_ID", listId)
             startActivity(intent)
         }
+
+        binding.imgButtonEditarLista.setOnClickListener {
+            editarLista(listId, listTitle, imageUri)
+        }
     }
 
     private fun configurarRecyclerView() {
@@ -61,8 +75,9 @@ class ItensActivity : AppCompatActivity() {
             onCheckChanged = { item, isChecked ->
                 atualizarStatusItem(item, isChecked)
             },
-            onDeleteClick = { item ->
-                mostrarDialogDeletar(item)
+            onLongItemClick = { item ->
+                // Clique longo: abre o menu de opções
+                showListOptionsDialog(item)
             }
         )
         binding.recyclerViewItens.layoutManager = LinearLayoutManager(this)
@@ -91,6 +106,43 @@ class ItensActivity : AppCompatActivity() {
                 Toast.makeText(this, "Erro ao atualizar: $erro", Toast.LENGTH_SHORT).show()
             }
         )
+    }
+
+    private fun showListOptionsDialog(item: ItemDados) {
+        val opcoes = arrayOf("Editar Item", "Remover Item")
+
+        android.app.AlertDialog.Builder(this)
+            .setTitle(item.nome)
+            .setItems(opcoes) { _, which ->
+                when (which) {
+                    0 -> editarItem(item)
+                    1 -> mostrarDialogDeletar(item)
+                }
+            }
+            .show()
+    }
+
+    private fun editarLista(listId:  String, listTitle: String, imageUri : String ) {
+        val intent = Intent(this, AdicionarListaActivity::class.java).apply {
+            putExtra("LIST_ID", listId)
+            putExtra("LIST_TITLE", listTitle)
+            putExtra("IMAGE_URI", imageUri)
+        }
+
+        startActivity(intent)
+    }
+
+    private fun editarItem(item: ItemDados) {
+        val intent = Intent(this, AdicionarProdutoActivity::class.java).apply {
+            putExtra("LIST_ID", listId)
+            putExtra("ITEM_ID", item.id)
+            putExtra("ITEM_TITLE", item.nome)
+            putExtra("ITEM_UNIDADE", item.unidade)
+            putExtra("ITEM_CATEGORIA", item.categoria)
+            putExtra("ITEM_QUANTIDADE", item.quantidade)
+        }
+
+        addOrEditItemLauncher.launch(intent)
     }
 
     private fun mostrarDialogDeletar(item: ItemDados) {

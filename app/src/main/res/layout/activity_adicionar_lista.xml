@@ -24,8 +24,8 @@
             android:textSize="24sp"
             android:textStyle="bold"
             android:textColor="@color/black"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="24dp" />
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="16dp" />
 
         <!-- Campo Nome da lista -->
         <EditText
@@ -101,7 +101,8 @@
             android:textSize="16sp"
             android:textColor="@color/white"
             android:backgroundTint="@color/system"
-            app:cornerRadius="8dp"
+            android:background="@drawable/ic_button_acessar"
+            android:padding="12dp"
             android:textAllCaps="false" />
 
     </LinearLayout>

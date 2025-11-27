@@ -129,8 +129,6 @@ class AdicionarListaActivity : AppCompatActivity() {
         binding.buttonAdicionar.isEnabled = false
         binding.buttonAdicionar.text = "Enviando..."
 
-        Toast.makeText(this, selectedImageUri.toString(), Toast.LENGTH_SHORT).show()
-
         // 👉 CASO 1: SALVAR SEM FOTO
         if (selectedImageUri == null) {
 

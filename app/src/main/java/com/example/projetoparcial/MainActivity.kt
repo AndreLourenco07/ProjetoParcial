@@ -6,12 +6,11 @@ import android.text.InputType
 import android.util.Patterns
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
-import androidx.core.content.edit
 import com.example.projetoparcial.databinding.ActivityMainBinding
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
@@ -32,11 +31,13 @@ class MainActivity : AppCompatActivity() {
 
         firebaseAuth = FirebaseAuth.getInstance()
 
+        //Botao para acessar a tela de cadastro
         binding.btnCadastro.setOnClickListener {
             val intent = Intent(this, CadastroContaActivity::class.java)
             startActivity(intent)
         }
 
+        //Botao para acessar com firebase
         binding.btnAcessar.setOnClickListener {
             val email = binding.emailInput.text.toString().trim()
             val senha = binding.senhaInput.text.toString().trim()

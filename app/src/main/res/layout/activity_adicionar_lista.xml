@@ -100,9 +100,22 @@
             android:text="Adicionar"
             android:textSize="16sp"
             android:textColor="@color/white"
-            android:backgroundTint="@color/system"
             android:background="@drawable/ic_button_acessar"
             android:padding="12dp"
+            android:textAllCaps="false" />
+
+        <!-- Botão Adicionar -->
+        <Button
+            android:id="@+id/btnExcluir"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:text="Excluir"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@drawable/ic_button_excluir"
+            app:backgroundTint="@null"
+            android:padding="12dp"
+            android:layout_marginTop="16dp"
             android:textAllCaps="false" />
 
     </LinearLayout>

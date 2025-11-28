@@ -135,10 +135,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        // Recupera os dados salvos
-        val prefs = getSharedPreferences("login_temp", MODE_PRIVATE)
-        binding.emailInput.setText(prefs.getString("email", ""))
-        binding.senhaInput.setText(prefs.getString("senha", ""))
+        // Verifica se o usuário já está autenticado
+        val usuarioAtual = firebaseAuth.currentUser
+        if (usuarioAtual != null) {
+            // Usuário já está logado, vai direto para ListasActivity
+            val intent = Intent(this, ListasActivity::class.java)
+            startActivity(intent)
+            finish() // Fecha MainActivity para não voltar ao fazer back
+        } else {
+            // Usuário não está logado, recupera os dados salvos
+            val prefs = getSharedPreferences("login_temp", MODE_PRIVATE)
+            binding.emailInput.setText(prefs.getString("email", ""))
+            binding.senhaInput.setText(prefs.getString("senha", ""))
+        }
     }
 
     override fun onStop() {

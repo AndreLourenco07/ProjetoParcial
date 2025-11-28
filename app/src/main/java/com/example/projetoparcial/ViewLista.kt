@@ -3,6 +3,7 @@ package com.example.projetoparcial
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.projetoparcial.data.model.ListaDados
 
 class ViewLista : ViewModel() {
 

@@ -2,6 +2,8 @@ package com.example.projetoparcial
 
 import android.net.Uri
 import android.util.Log
+import com.example.projetoparcial.data.model.ItemDados
+import com.example.projetoparcial.data.model.ListaDados
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -90,16 +92,34 @@ class BD {
         onSucesso: () -> Unit,
         onErro: (String) -> Unit
     ) {
-        db.collection("listas")
-            .document(idLista)
-            .delete()
-            .addOnSuccessListener {
-                Log.d("BD", "Lista removida com ID: $idLista")
-                onSucesso()
+        val listaRef = db.collection("listas").document(idLista)
+
+        listaRef.collection("itens")
+            .get()
+            .addOnSuccessListener { snapshot ->
+
+                val batch = db.batch()
+
+                for (documentoItem in snapshot.documents) {
+                    batch.delete(documentoItem.reference)
+                }
+
+                batch.delete(listaRef)
+
+                batch.commit()
+                    .addOnSuccessListener {
+                        Log.d("BD", "Lista e itens removidos com sucesso. ID: $idLista")
+                        onSucesso()
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("BD", "Erro ao executar o batch de exclusão", e)
+                        onErro(e.message ?: "Erro ao deletar itens e lista")
+                    }
+
             }
             .addOnFailureListener { e ->
-                Log.e("BD", "Erro ao remover lista", e)
-                onErro(e.message ?: "Erro desconhecido")
+                Log.e("BD", "Erro ao buscar itens para deletar", e)
+                onErro("Não foi possível acessar os itens da lista para exclusão.")
             }
     }
 

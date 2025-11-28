@@ -1,6 +1,4 @@
-package com.example.projetoparcial
-
-import java.util.UUID
+package com.example.projetoparcial.data.model
 
 data class ListaDados(
     val id: String = "",

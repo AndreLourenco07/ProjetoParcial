@@ -12,5 +12,8 @@
         <item>Fruta</item>
         <item>Verdura</item>
         <item>Carne</item>
+        <item>Bebidas</item>
+        <item>Limpeza</item>
+        <item>Mercearia</item>
     </string-array>
 </resources>

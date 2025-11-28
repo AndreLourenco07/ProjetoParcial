@@ -4,5 +4,6 @@
     <color name="white">#FFFFFFFF</color>
     <color name="system">#FF00A651</color>
     <color name="cinza">#FF757575</color>
+    <color name="red">#E04034</color>
     <color name="cinzaclaro">#D3D3D3</color>
 </resources>

@@ -36,7 +36,7 @@
                     android:contentDescription="Buscar" />
 
                 <EditText
-                    android:id="@+id/searchEditText"
+                    android:id="@+id/etBuscarItem"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"

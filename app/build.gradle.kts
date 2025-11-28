@@ -58,11 +58,16 @@ dependencies {
     // Glide
     implementation("com.github.bumptech.glide:glide:5.0.4")
 
+    implementation("com.google.android.material:material:1.9.0")
     // Swipe Refresh
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
+    //coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
     // ViewModel + Activity KTX
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-ktx:1.8.0")
 
     // RecyclerView

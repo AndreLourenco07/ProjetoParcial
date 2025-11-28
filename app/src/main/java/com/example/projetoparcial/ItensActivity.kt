@@ -10,7 +10,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.projetoparcial.data.model.ItemDados
 import com.example.projetoparcial.databinding.ActivityItensBinding
 
 class ItensActivity : AppCompatActivity() {
@@ -23,10 +25,12 @@ class ItensActivity : AppCompatActivity() {
     private var listTitle = ""
     private var imageUri = ""
 
+    // Lista completa de itens (sem filtro)
+    private var todosOsItens: List<ItemDados> = emptyList()
+
     private val addOrEditItemLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                // Recarrega as listas do Firestore após adicionar/editar
                 carregarItens()
             }
         }
@@ -52,10 +56,8 @@ class ItensActivity : AppCompatActivity() {
             insets
         }
 
-        // Configurar RecyclerView
         configurarRecyclerView()
-
-        // Carregar itens
+        configurarBusca()
         carregarItens()
 
         binding.btnAddProduto.setOnClickListener {
@@ -71,12 +73,11 @@ class ItensActivity : AppCompatActivity() {
 
     private fun configurarRecyclerView() {
         adapter = ItensAdapter(
-            listaItens = emptyList(),
+            listaItensGrouped = emptyMap(),
             onCheckChanged = { item, isChecked ->
                 atualizarStatusItem(item, isChecked)
             },
-            onLongItemClick = { item ->
-                // Clique longo: abre o menu de opções
+            onItemClick = { item ->
                 showListOptionsDialog(item)
             }
         )
@@ -84,14 +85,43 @@ class ItensActivity : AppCompatActivity() {
         binding.recyclerViewItens.adapter = adapter
     }
 
+    private fun configurarBusca() {
+        binding.etBuscarItem.addTextChangedListener { termo ->
+            val textoBusca = termo.toString().trim().lowercase()
+
+            if (textoBusca.isEmpty()) {
+                // Se o campo de busca estiver vazio, mostra todos os itens
+                atualizarAdapter(todosOsItens)
+            } else {
+                // Filtra os itens localmente
+                val itensFiltrados = todosOsItens.filter { item ->
+                    item.nome.lowercase().contains(textoBusca) ||
+                            item.categoria?.lowercase()?.contains(textoBusca) == true ||
+                            item.unidade.lowercase().contains(textoBusca)
+                }
+                atualizarAdapter(itensFiltrados)
+            }
+        }
+    }
+
     private fun carregarItens() {
         if (listId.isEmpty()) return
 
         bd.lerItensLista(listId) { itens ->
-            // Ordenar: não concluídos primeiro, concluídos no final
-            val itensOrdenados = itens.sortedBy { it.concluido }
-            adapter.atualizarLista(itensOrdenados)
+            todosOsItens = itens
+            atualizarAdapter(itens)
         }
+    }
+
+    private fun atualizarAdapter(itens: List<ItemDados>) {
+        // Ordenar: não concluídos primeiro, depois por categoria alfabética e nome
+        val itensOrdenados = itens
+            .sortedWith(compareBy({ it.concluido }, { it.categoria ?: "" }, { it.nome }))
+
+        // Agrupar por categoria
+        val itensAgrupados = itensOrdenados.groupBy { it.categoria ?: "Sem categoria" }
+
+        adapter.atualizarLista(itensAgrupados)
     }
 
     private fun atualizarStatusItem(item: ItemDados, concluido: Boolean) {
@@ -100,7 +130,7 @@ class ItensActivity : AppCompatActivity() {
             idItem = item.id,
             concluido = concluido,
             onSucesso = {
-                carregarItens() // Recarrega e reordena automaticamente
+                carregarItens()
             },
             onErro = { erro ->
                 Toast.makeText(this, "Erro ao atualizar: $erro", Toast.LENGTH_SHORT).show()
@@ -122,7 +152,7 @@ class ItensActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun editarLista(listId:  String, listTitle: String, imageUri : String ) {
+    private fun editarLista(listId: String, listTitle: String, imageUri: String) {
         val intent = Intent(this, AdicionarListaActivity::class.java).apply {
             putExtra("LIST_ID", listId)
             putExtra("LIST_TITLE", listTitle)

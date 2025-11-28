@@ -2,16 +2,20 @@ package com.example.projetoparcial
 
 import android.Manifest
 import android.app.AlertDialog
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import com.example.projetoparcial.data.model.ListaDados
 import com.example.projetoparcial.databinding.ActivityAdicionarListaBinding
 import java.io.File
 
@@ -19,6 +23,8 @@ class AdicionarListaActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdicionarListaBinding
     private var selectedImageUri: Uri? = null
+
+    private val viewModel: ViewLista by viewModels()
 
     private var listId = ""
     private var listTitle = ""
@@ -56,6 +62,20 @@ class AdicionarListaActivity : AppCompatActivity() {
             binding.edtNomeLista.setText(listTitle)
         }
 
+        // Se tiver ID, preenche os campos e MOSTRA o botão remover
+        if (listId.isNotEmpty()) {
+            binding.edtNomeLista.setText(listTitle)
+
+            // Lógica de visibilidade do botão Remover
+            binding.btnExcluir.visibility = View.VISIBLE
+            binding.btnExcluir.setOnClickListener {
+                showDeleteConfirmationDialog()
+            }
+        } else {
+            // Se for lista nova, ESCONDE o botão remover
+            binding.btnExcluir.visibility = View.GONE
+        }
+
         // Clique para escolher da galeria
         binding.imageViewPreview.setOnClickListener {
             galleryLauncher.launch("image/*")
@@ -71,7 +91,33 @@ class AdicionarListaActivity : AppCompatActivity() {
             salvarLista()
         }
     }
+    private fun showDeleteConfirmationDialog() {
+        AlertDialog.Builder(this)
+            .setTitle("Remover Lista")
+            .setMessage("Tem certeza de que deseja remover a lista '$listTitle'?")
+            .setPositiveButton("Remover") { _, _ ->
 
+                binding.btnExcluir.isEnabled = false
+
+                BD().removerLista(
+                    idLista = listId,
+                    onSucesso = {
+                        Toast.makeText(this, "Lista removida com sucesso", Toast.LENGTH_SHORT).show()
+
+                        finish()
+
+                        val intent = Intent(this, ListasActivity::class.java)
+                        startActivity(intent)
+                    },
+                    onErro = { mensagem ->
+                        binding.btnExcluir.isEnabled = true
+                        Toast.makeText(this, "Erro: $mensagem", Toast.LENGTH_SHORT).show()
+                    }
+                )
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
+    }
     private fun pedirPermissaoECapturar() {
         when {
             ContextCompat.checkSelfPermission(

@@ -39,13 +39,13 @@ class AdapterLista(
 
         fun bind(list: ListaDados) {
             // título
-            binding.textViewListTitle.text = list.nome
+            binding.txtViewListTitle.text = list.nome
 
             // imagem
             if (!list.imageUrl.isNullOrBlank()) {
-                binding.imageViewList.setImageURI(Uri.parse(list.imageUrl))
+                binding.imgViewList.setImageURI(Uri.parse(list.imageUrl))
             } else {
-                binding.imageViewList.setImageResource(R.drawable.ic_placeholder_image)
+                binding.imgViewList.setImageResource(R.drawable.ic_placeholder_image)
             }
 
             // clique curto

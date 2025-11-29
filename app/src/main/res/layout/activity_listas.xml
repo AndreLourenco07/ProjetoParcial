@@ -15,6 +15,7 @@
 
         <!-- Barra de Busca -->
         <androidx.cardview.widget.CardView
+            android:id="@+id/cardBusca"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="8dp"
@@ -36,7 +37,7 @@
                     android:contentDescription="Buscar" />
 
                 <EditText
-                    android:id="@+id/etBuscarItem"
+                    android:id="@+id/edtBuscarItem"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -46,7 +47,7 @@
                     android:inputType="text" />
 
                 <ImageButton
-                    android:id="@+id/imgButtonVoltar"
+                    android:id="@+id/imgBtnVoltar"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     android:src="@drawable/ic_logout"
@@ -61,7 +62,7 @@
 
         <!-- Título -->
         <TextView
-            android:id="@+id/textViewLista"
+            android:id="@+id/txtLista"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Suas Listas"

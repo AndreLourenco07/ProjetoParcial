@@ -52,37 +52,29 @@ class ItensAdapter(
         when (holder) {
             is HeaderViewHolder -> {
                 val categoria = items[position].first
-                holder.binding.textHeaderCategory.text = categoria ?: "Sem categoria"
+                holder.binding.txtHeaderCategory.text = categoria ?: "Sem categoria"
             }
             is ItemViewHolder -> {
                 val item = items[position].second
                 if (item != null) {
                     holder.binding.apply {
-                        // Nome do produto
-                        tvNomeProduto.text = item.nome
 
-                        // Subtítulo com quantidade, unidade e categoria
+                        tvNomeProduto.text = item.nome
                         tvSubtitulo.text = "${item.quantidade} ${item.unidade} - ${item.categoria}"
 
-                        // IMPORTANTE: Remover listener antes de setar o estado
                         cbConcluido.setOnCheckedChangeListener(null)
-
-                        // Setar estado do checkbox
                         cbConcluido.isChecked = item.concluido
 
-                        // Mudar fundo se concluído
                         if (item.concluido) {
                             root.setBackgroundColor(Color.parseColor("#E0E0E0"))
                         } else {
                             root.setBackgroundColor(Color.TRANSPARENT)
                         }
 
-                        // Adicionar listener DEPOIS de setar o estado
                         cbConcluido.setOnCheckedChangeListener { _, isChecked ->
                             onCheckChanged(item, isChecked)
                         }
 
-                        // Long click para deletar
                         root.setOnClickListener {
                             onItemClick(item)
                             true
@@ -107,14 +99,11 @@ class ItensAdapter(
         listaItensGrouped = novaLista
         items.clear()
 
-        // Ordenar categorias alfabeticamente
         val categoriasOrdenadas = novaLista.keys.sorted()
 
         for (categoria in categoriasOrdenadas) {
-            // Adicionar header da categoria
             items.add(Pair(categoria, null))
 
-            // Adicionar itens da categoria ordenados alfabeticamente
             val itensCategoria = novaLista[categoria] ?: emptyList()
             val itensOrdenados = itensCategoria.sortedBy { it.nome }
 

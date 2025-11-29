@@ -16,7 +16,7 @@
             android:padding="32dp">
 
             <TextView
-                android:id="@+id/textCriarConta"
+                android:id="@+id/txtCriarConta"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Crie sua conta"
@@ -26,7 +26,7 @@
                 android:layout_marginBottom="30dp"/>
 
             <TextView
-                android:id="@+id/textNome"
+                android:id="@+id/txtNome"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -37,7 +37,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/nomeInput"
+                android:id="@+id/edtNome"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_edit_background"
@@ -46,7 +46,7 @@
                 android:padding="12dp" />
 
             <TextView
-                android:id="@+id/textEmail"
+                android:id="@+id/txtEmail"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -57,7 +57,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/emailInput"
+                android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_edit_background"
@@ -66,7 +66,7 @@
                 android:padding="12dp" />
 
             <TextView
-                android:id="@+id/textSenha"
+                android:id="@+id/txtSenha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -77,7 +77,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/senhaInput"
+                android:id="@+id/edtSenha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_edit_background"
@@ -86,7 +86,7 @@
                 android:padding="12dp" />
 
             <TextView
-                android:id="@+id/textConfirmaSenha"
+                android:id="@+id/txtConfirmaSenha"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -97,7 +97,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/confirmaSenhaInput"
+                android:id="@+id/edtConfirmaSenha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_edit_background"

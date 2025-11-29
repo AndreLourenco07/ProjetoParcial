@@ -3,7 +3,6 @@ package com.example.projetoparcial
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
@@ -14,6 +13,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.projetoparcial.data.model.ItemDados
 import com.example.projetoparcial.databinding.ActivityItensBinding
+import com.google.android.material.snackbar.Snackbar
 
 class ItensActivity : AppCompatActivity() {
 
@@ -47,7 +47,7 @@ class ItensActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         if (listId.isNotEmpty()) {
-            binding.textTitulo.text = listTitle
+            binding.txtTitulo.text = listTitle
         }
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
@@ -66,7 +66,7 @@ class ItensActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        binding.imgButtonEditarLista.setOnClickListener {
+        binding.imgBtnEditarLista.setOnClickListener {
             editarLista(listId, listTitle, imageUri)
         }
     }
@@ -86,7 +86,7 @@ class ItensActivity : AppCompatActivity() {
     }
 
     private fun configurarBusca() {
-        binding.etBuscarItem.addTextChangedListener { termo ->
+        binding.edtBuscarItem.addTextChangedListener { termo ->
             val textoBusca = termo.toString().trim().lowercase()
 
             if (textoBusca.isEmpty()) {
@@ -133,7 +133,7 @@ class ItensActivity : AppCompatActivity() {
                 carregarItens()
             },
             onErro = { erro ->
-                Toast.makeText(this, "Erro ao atualizar: $erro", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Erro ao atualizar: $erro", Snackbar.LENGTH_SHORT).show()
             }
         )
     }
@@ -191,11 +191,11 @@ class ItensActivity : AppCompatActivity() {
             idLista = listId,
             idItem = item.id,
             onSucesso = {
-                Toast.makeText(this, "Item deletado!", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Item deletado!", Snackbar.LENGTH_SHORT).show()
                 carregarItens()
             },
             onErro = { erro ->
-                Toast.makeText(this, "Erro ao deletar: $erro", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Erro ao deletar: $erro", Snackbar.LENGTH_SHORT).show()
             }
         )
     }

@@ -21,7 +21,7 @@ Este é o layout para um único item na grade da RecyclerView.
 
         <!-- Imagem da lista -->
         <ImageView
-            android:id="@+id/imageViewList"
+            android:id="@+id/imgViewList"
             android:layout_width="match_parent"
             android:layout_height="140dp"
             android:scaleType="centerCrop"
@@ -31,7 +31,7 @@ Este é o layout para um único item na grade da RecyclerView.
 
         <!-- Título da lista -->
         <TextView
-            android:id="@+id/textViewListTitle"
+            android:id="@+id/txtViewListTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"

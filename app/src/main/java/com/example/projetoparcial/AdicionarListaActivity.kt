@@ -8,7 +8,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +16,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import com.example.projetoparcial.data.model.ListaDados
 import com.example.projetoparcial.databinding.ActivityAdicionarListaBinding
+import com.google.android.material.snackbar.Snackbar
 import java.io.File
 
 class AdicionarListaActivity : AppCompatActivity() {
@@ -34,14 +34,14 @@ class AdicionarListaActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             uri?.let {
                 selectedImageUri = it
-                binding.imageViewPreview.setImageURI(it)
+                binding.imgViewPreview.setImageURI(it)
             }
         }
 
     private val cameraLauncher =
         registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
             if (success) {
-                binding.imageViewPreview.setImageURI(selectedImageUri)
+                binding.imgViewPreview.setImageURI(selectedImageUri)
             }
         }
 
@@ -77,7 +77,7 @@ class AdicionarListaActivity : AppCompatActivity() {
         }
 
         // Clique para escolher da galeria
-        binding.imageViewPreview.setOnClickListener {
+        binding.imgViewPreview.setOnClickListener {
             galleryLauncher.launch("image/*")
         }
 
@@ -87,7 +87,7 @@ class AdicionarListaActivity : AppCompatActivity() {
         }
 
         // Botão de salvar
-        binding.buttonAdicionar.setOnClickListener {
+        binding.btnAdicionar.setOnClickListener {
             salvarLista()
         }
     }
@@ -102,7 +102,7 @@ class AdicionarListaActivity : AppCompatActivity() {
                 BD().removerLista(
                     idLista = listId,
                     onSucesso = {
-                        Toast.makeText(this, "Lista removida com sucesso", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, "Lista removida com sucesso", Snackbar.LENGTH_SHORT).show()
 
                         finish()
 
@@ -111,7 +111,7 @@ class AdicionarListaActivity : AppCompatActivity() {
                     },
                     onErro = { mensagem ->
                         binding.btnExcluir.isEnabled = true
-                        Toast.makeText(this, "Erro: $mensagem", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, "Erro: $mensagem", Snackbar.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -148,7 +148,7 @@ class AdicionarListaActivity : AppCompatActivity() {
     private val permissionLauncher =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { granted ->
             if (granted) abrirCamera()
-            else Toast.makeText(this, "Permissão negada", Toast.LENGTH_SHORT).show()
+            else Snackbar.make(binding.root, "Permissão negada", Snackbar.LENGTH_SHORT).show()
         }
 
     private fun abrirCamera() {
@@ -163,17 +163,16 @@ class AdicionarListaActivity : AppCompatActivity() {
 
         cameraLauncher.launch(selectedImageUri)
     }
-
     private fun salvarLista() {
         val nome = binding.edtNomeLista.text.toString().trim()
 
         if (nome.isEmpty()) {
-            Toast.makeText(this, "Digite um nome", Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, "Digite um nome", Snackbar.LENGTH_SHORT).show()
             return
         }
 
-        binding.buttonAdicionar.isEnabled = false
-        binding.buttonAdicionar.text = "Enviando..."
+        binding.btnAdicionar.isEnabled = false
+        binding.btnAdicionar.text = "Enviando..."
 
         // 👉 CASO 1: SALVAR SEM FOTO
         if (selectedImageUri == null) {
@@ -188,11 +187,11 @@ class AdicionarListaActivity : AppCompatActivity() {
                 BD().salvarLista(
                     lista = novaLista,
                     onSucesso = {
-                        Toast.makeText(this, "Lista salva sem foto!", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, "Lista salva sem foto!", Snackbar.LENGTH_SHORT).show()
                         finish()
                     },
                     onErro = {
-                        Toast.makeText(this, "Erro ao salvar lista: $it", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, "Erro ao salvar lista: $it", Snackbar.LENGTH_SHORT).show()
                     }
                 )
             }else {
@@ -200,11 +199,11 @@ class AdicionarListaActivity : AppCompatActivity() {
                     listId,
                     lista = novaLista,
                     onSucesso = {
-                        Toast.makeText(this, "Lista atualizada sem foto!", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, "Lista atualizada sem foto!", Snackbar.LENGTH_SHORT).show()
                         finish()
                     },
                     onErro = {
-                        Toast.makeText(this, "Erro ao atualizar lista: $it", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, "Erro ao atualizar lista: $it", Snackbar.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -227,12 +226,11 @@ class AdicionarListaActivity : AppCompatActivity() {
                     BD().salvarLista(
                         lista = novaLista,
                         onSucesso = {
-                            Toast.makeText(this, "Lista salva!", Toast.LENGTH_SHORT).show()
+                            Snackbar.make(binding.root, "Lista salva!", Snackbar.LENGTH_SHORT).show()
                             finish()
                         },
                         onErro = {
-                            Toast.makeText(this, "Erro ao salvar lista: $it", Toast.LENGTH_SHORT)
-                                .show()
+                            Snackbar.make(binding.root, "Erro ao salvar lista: $it", Snackbar.LENGTH_SHORT).show()
                         }
                     )
                 }else{
@@ -240,11 +238,11 @@ class AdicionarListaActivity : AppCompatActivity() {
                         listId,
                         lista = novaLista,
                         onSucesso = {
-                            Toast.makeText(this, "Lista atualizada sem foto!", Toast.LENGTH_SHORT).show()
+                            Snackbar.make(binding.root, "Lista atualizada sem foto!", Snackbar.LENGTH_SHORT).show()
                             finish()
                         },
                         onErro = {
-                            Toast.makeText(this, "Erro ao atualizar lista: $it", Toast.LENGTH_SHORT).show()
+                            Snackbar.make(binding.root, "Erro ao atualizar lista: $it", Snackbar.LENGTH_SHORT).show()
                         }
                     )
                 }
@@ -252,9 +250,12 @@ class AdicionarListaActivity : AppCompatActivity() {
 
             },
             onErro = {
-                Toast.makeText(this, "Erro ao enviar imagem: $it", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "Erro ao enviar imagem: $it", Snackbar.LENGTH_SHORT).show()
             }
         )
+
+        binding.btnAdicionar.isEnabled = true
+        binding.btnAdicionar.text = "Adicionar"
     }
 
 }

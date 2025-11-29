@@ -38,7 +38,7 @@
 
         <!-- Campo Nome do Item -->
         <EditText
-            android:id="@+id/etNomeItem"
+            android:id="@+id/edtNomeItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Nome do item"
@@ -66,7 +66,7 @@
 
             <!-- Campo Quantidade -->
             <EditText
-                android:id="@+id/etQuantidade"
+                android:id="@+id/edtQuantidade"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

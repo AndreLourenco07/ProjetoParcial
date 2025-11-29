@@ -33,10 +33,10 @@ class CadastroContaActivity : AppCompatActivity() {
         }
 
         binding.btnCriar.setOnClickListener {
-            val nome  = binding.nomeInput.text.toString().trim()
-            val email = binding.emailInput.text.toString().trim()
-            val senha = binding.senhaInput.text.toString().trim()
-            val confirmaSenha = binding.confirmaSenhaInput.text.toString().trim()
+            val nome  = binding.edtNome.text.toString().trim()
+            val email = binding.edtEmail.text.toString().trim()
+            val senha = binding.edtSenha.text.toString().trim()
+            val confirmaSenha = binding.edtConfirmaSenha.text.toString().trim()
 
             if (nome.isNotEmpty() && email.isNotEmpty() && senha.isNotEmpty() && confirmaSenha.isNotEmpty()) {
                 if (senha == confirmaSenha) {
@@ -49,10 +49,10 @@ class CadastroContaActivity : AppCompatActivity() {
                         }
                     }
 
-                    binding.nomeInput.setText("")
-                    binding.emailInput.setText("")
-                    binding.senhaInput.setText("")
-                    binding.confirmaSenhaInput.setText("")
+                    binding.edtNome.setText("")
+                    binding.edtEmail.setText("")
+                    binding.edtSenha.setText("")
+                    binding.edtConfirmaSenha.setText("")
 
                     // limpa os SharedPreferences após cadastro
                     val prefs = getSharedPreferences("cadastro_temp", MODE_PRIVATE)
@@ -74,10 +74,10 @@ class CadastroContaActivity : AppCompatActivity() {
         super.onStart()
         // Recupera os dados salvos
         val prefs = getSharedPreferences("cadastro_temp", MODE_PRIVATE)
-        binding.nomeInput.setText(prefs.getString("nome", ""))
-        binding.emailInput.setText(prefs.getString("email", ""))
-        binding.senhaInput.setText(prefs.getString("senha", ""))
-        binding.confirmaSenhaInput.setText(prefs.getString("confirmaSenha", ""))
+        binding.edtNome.setText(prefs.getString("nome", ""))
+        binding.edtEmail.setText(prefs.getString("email", ""))
+        binding.edtSenha.setText(prefs.getString("senha", ""))
+        binding.edtConfirmaSenha.setText(prefs.getString("confirmaSenha", ""))
     }
 
     override fun onStop() {
@@ -85,10 +85,10 @@ class CadastroContaActivity : AppCompatActivity() {
         // Salva os dados temporários
         val prefs = getSharedPreferences("cadastro_temp", MODE_PRIVATE)
         prefs.edit {
-            putString("nome", binding.nomeInput.text.toString())
-            putString("email", binding.emailInput.text.toString())
-            putString("senha", binding.senhaInput.text.toString())
-            putString("confirmaSenha", binding.confirmaSenhaInput.text.toString())
+            putString("nome", binding.edtNome.text.toString())
+            putString("email", binding.edtEmail.text.toString())
+            putString("senha", binding.edtSenha.text.toString())
+            putString("confirmaSenha", binding.edtConfirmaSenha.text.toString())
         }
     }
 }

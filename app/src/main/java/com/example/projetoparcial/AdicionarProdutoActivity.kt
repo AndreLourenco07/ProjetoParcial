@@ -2,11 +2,11 @@ package com.example.projetoparcial
 
 import android.os.Bundle
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.projetoparcial.data.model.ItemDados
 import com.example.projetoparcial.databinding.ActivityAdicionarProdutoBinding
+import com.google.android.material.snackbar.Snackbar
 
 class AdicionarProdutoActivity : AppCompatActivity() {
 
@@ -46,7 +46,7 @@ class AdicionarProdutoActivity : AppCompatActivity() {
         )
 
         if (itemTitle.isNotEmpty()) {
-            binding.etNomeItem.setText(itemTitle)
+            binding.edtNomeItem.setText(itemTitle)
         }
 
         if (itemUnidade.isNotEmpty()) {
@@ -66,29 +66,38 @@ class AdicionarProdutoActivity : AppCompatActivity() {
         }
 
         if (itemQuantidade > 0) {
-            binding.etQuantidade.setText(itemQuantidade.toString())
+            binding.edtQuantidade.setText(itemQuantidade.toString())
         }
 
         binding.btnAdicionar.setOnClickListener {
-            salvarProduto()
+            val Quantidade = binding.edtQuantidade.text.toString().trim()
+            val NomeItem   = binding.edtNomeItem.text.toString().trim()
+
+            when {
+                Quantidade.isEmpty() || NomeItem.isEmpty() -> {
+                    Snackbar.make(binding.root, "Preencha todos os campos!", Snackbar.LENGTH_SHORT).show()
+                }else -> {
+                    salvarProduto()
+                }
+            }
         }
     }
 
     private fun salvarProduto() {
-        val nomeProduto = binding.etNomeItem.text.toString().trim()
-        val qtdProduto = binding.etQuantidade.text.toString().toDoubleOrNull() ?: 1.0
+        val nomeProduto = binding.edtNomeItem.text.toString().trim()
+        val qtdProduto = binding.edtQuantidade.text.toString().toDoubleOrNull() ?: 1.0
 
         // Pegar unidade e categoria dos componentes do XML
         val unidade = binding.spinnerUnidade.selectedItem.toString()
         val categoria = binding.spinnerCategoria.selectedItem.toString()
 
         if (nomeProduto.isEmpty()) {
-            Toast.makeText(this, "Digite um nome do produto", Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, "Digite um nome do produto", Snackbar.LENGTH_SHORT).show()
             return
         }
 
         if (idLista.isEmpty()) {
-            Toast.makeText(this, "Erro: lista não identificada!", Toast.LENGTH_SHORT).show()
+            Snackbar.make(binding.root, "Erro: lista não identificada!", Snackbar.LENGTH_SHORT).show()
             return
         }
 
@@ -104,11 +113,11 @@ class AdicionarProdutoActivity : AppCompatActivity() {
                 idLista = idLista,
                 item = item,
                 onSucesso = {
-                    Toast.makeText(this, "Produto salvo!", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "Produto salvo!", Snackbar.LENGTH_SHORT).show()
                     finish()
                 },
                 onErro = {
-                    Toast.makeText(this, "Erro ao salvar produto: $it", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "Erro ao salvar produto: $it", Snackbar.LENGTH_SHORT).show()
                 }
             )
         }else{
@@ -117,11 +126,11 @@ class AdicionarProdutoActivity : AppCompatActivity() {
                 idItem = itemId,
                 item = item,
                 onSucesso = {
-                    Toast.makeText(this, "Produto atualizado!", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "Produto atualizado!", Snackbar.LENGTH_SHORT).show()
                     finish()
                 },
                 onErro = {
-                    Toast.makeText(this, "Erro ao atualizar produto: $it", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "Erro ao atualizar produto: $it", Snackbar.LENGTH_SHORT).show()
                 }
             )
         }

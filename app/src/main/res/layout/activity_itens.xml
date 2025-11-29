@@ -34,7 +34,7 @@
                 android:contentDescription="Buscar" />
 
             <EditText
-                android:id="@+id/etBuscarItem"
+                android:id="@+id/edtBuscarItem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -44,7 +44,7 @@
                 android:inputType="text" />
 
             <ImageButton
-                android:id="@+id/imgButtonEditarLista"
+                android:id="@+id/imgBtnEditarLista"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:src="@drawable/ic_edit_list"
@@ -59,7 +59,7 @@
 
     <!-- Título Supermercado -->
     <TextView
-        android:id="@+id/textTitulo"
+        android:id="@+id/txtTitulo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -84,7 +84,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textTitulo"
+        app:layout_constraintTop_toBottomOf="@id/txtTitulo"
         tools:listitem="@layout/activity_item_produtos" />
 
     <!-- Botão FAB -->

@@ -39,8 +39,8 @@ class MainActivity : AppCompatActivity() {
 
         //Botao para acessar com firebase
         binding.btnAcessar.setOnClickListener {
-            val email = binding.emailInput.text.toString().trim()
-            val senha = binding.senhaInput.text.toString().trim()
+            val email = binding.edtEmail.text.toString().trim()
+            val senha = binding.edtSenha.text.toString().trim()
 
             when {
                 email.isEmpty() || senha.isEmpty() -> {
@@ -52,8 +52,8 @@ class MainActivity : AppCompatActivity() {
                 else -> {
                     firebaseAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener {
                         if (it.isSuccessful){
-                            binding.emailInput.setText("")
-                            binding.senhaInput.setText("")
+                            binding.edtEmail.setText("")
+                            binding.edtSenha.setText("")
 
                             val intent = Intent(this, ListasActivity::class.java)
                             startActivity(intent)
@@ -73,7 +73,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.textEsqueceuSenha.setOnClickListener {
+        binding.txtEsqueceuSenha.setOnClickListener {
             mostrarDialogoRedefinirSenha()
         }
 
@@ -135,8 +135,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+
         // Verifica se o usuário já está autenticado
         val usuarioAtual = firebaseAuth.currentUser
+
         if (usuarioAtual != null) {
             // Usuário já está logado, vai direto para ListasActivity
             val intent = Intent(this, ListasActivity::class.java)
@@ -145,8 +147,8 @@ class MainActivity : AppCompatActivity() {
         } else {
             // Usuário não está logado, recupera os dados salvos
             val prefs = getSharedPreferences("login_temp", MODE_PRIVATE)
-            binding.emailInput.setText(prefs.getString("email", ""))
-            binding.senhaInput.setText(prefs.getString("senha", ""))
+            binding.edtEmail.setText(prefs.getString("email", ""))
+            binding.edtSenha.setText(prefs.getString("senha", ""))
         }
     }
 
@@ -155,8 +157,8 @@ class MainActivity : AppCompatActivity() {
         // Salva os dados temporários
         val prefs = getSharedPreferences("login_temp", MODE_PRIVATE)
         prefs.edit {
-            putString("email", binding.emailInput.text.toString())
-            putString("senha", binding.senhaInput.text.toString())
+            putString("email", binding.edtEmail.text.toString())
+            putString("senha", binding.edtSenha.text.toString())
         }
     }
 }

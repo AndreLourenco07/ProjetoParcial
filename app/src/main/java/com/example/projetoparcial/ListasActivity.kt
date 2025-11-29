@@ -13,6 +13,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.core.widget.addTextChangedListener
 import com.example.projetoparcial.data.model.ListaDados
 import com.example.projetoparcial.databinding.ActivityListasBinding
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 
 class ListasActivity : AppCompatActivity() {
@@ -48,7 +49,7 @@ class ListasActivity : AppCompatActivity() {
 
         viewModel.toastMessage.observe(this) { message ->
             message?.let {
-                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
                 viewModel.onToastShown()
             }
         }
@@ -58,7 +59,7 @@ class ListasActivity : AppCompatActivity() {
             addOrEditListLauncher.launch(intent)
         }
 
-        binding.imgButtonVoltar.setOnClickListener {
+        binding.imgBtnVoltar.setOnClickListener {
             mostrarDialogoLogout()
         }
 
@@ -84,7 +85,7 @@ class ListasActivity : AppCompatActivity() {
     }
 
     private fun configurarBusca() {
-        binding.etBuscarItem.addTextChangedListener { termo ->
+        binding.edtBuscarItem.addTextChangedListener { termo ->
             val textoBusca = termo.toString().trim().lowercase()
 
             if (textoBusca.isEmpty()) {
@@ -180,7 +181,7 @@ class ListasActivity : AppCompatActivity() {
     private fun realizarLogout() {
         firebaseAuth.signOut()
 
-        Toast.makeText(this, "Logout realizado com sucesso", Toast.LENGTH_SHORT).show()
+        Snackbar.make(binding.root, "Logout realizado com sucesso", Snackbar.LENGTH_SHORT).show()
 
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)

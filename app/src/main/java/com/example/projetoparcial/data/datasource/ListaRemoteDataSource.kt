@@ -91,14 +91,29 @@ class ListaRemoteDataSource {
         }
     }
 
+    // 🆕 EXCLUSÃO EM BATCH (Lista + Itens)
     suspend fun removerLista(idLista: String): Result<Unit> {
         return try {
-            db.collection("listas")
-                .document(idLista)
-                .delete()
-                .await()
+            val listaRef = db.collection("listas").document(idLista)
 
-            Log.d("ListaRemoteDataSource", "Lista removida com ID: $idLista")
+            // Buscar todos os itens da lista
+            val itensSnapshot = listaRef.collection("itens").get().await()
+
+            // Criar batch para deletar tudo junto
+            val batch = db.batch()
+
+            // Adicionar todos os itens ao batch
+            for (itemDoc in itensSnapshot.documents) {
+                batch.delete(itemDoc.reference)
+            }
+
+            // Adicionar a lista ao batch
+            batch.delete(listaRef)
+
+            // Executar batch
+            batch.commit().await()
+
+            Log.d("ListaRemoteDataSource", "Lista e itens removidos: $idLista")
             Result.success(Unit)
         } catch (e: Exception) {
             Log.e("ListaRemoteDataSource", "Erro ao remover lista", e)

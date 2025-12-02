@@ -1,4 +1,4 @@
-package com.example.projetoparcial
+package com.example.projetoparcial.adapter
 
 import android.graphics.Color
 import android.view.LayoutInflater

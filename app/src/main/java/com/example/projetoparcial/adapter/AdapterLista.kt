@@ -1,9 +1,10 @@
-package com.example.projetoparcial
+package com.example.projetoparcial.adapter
 
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.projetoparcial.R
 import com.example.projetoparcial.data.model.ListaDados
 import com.example.projetoparcial.databinding.ActivityItemListasBinding
 

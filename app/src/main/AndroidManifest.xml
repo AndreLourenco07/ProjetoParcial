@@ -31,22 +31,22 @@
         </provider>
 
         <activity
-            android:name=".AdicionarProdutoActivity"
+            android:name=".ui.AdicionarProdutoActivity"
             android:exported="false" />
         <activity
-            android:name=".ItensActivity"
+            android:name=".ui.ItensActivity"
             android:exported="false" />
         <activity
-            android:name=".AdicionarListaActivity"
+            android:name=".ui.AdicionarListaActivity"
             android:exported="false" />
         <activity
-            android:name=".ListasActivity"
+            android:name=".ui.ListasActivity"
             android:exported="false" />
         <activity
-            android:name=".CadastroContaActivity"
+            android:name=".ui.CadastroContaActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

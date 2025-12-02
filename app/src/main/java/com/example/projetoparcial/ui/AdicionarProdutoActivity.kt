@@ -1,9 +1,11 @@
-package com.example.projetoparcial
+package com.example.projetoparcial.ui
 
+import android.R
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.example.projetoparcial.BD
 import com.example.projetoparcial.data.model.ItemDados
 import com.example.projetoparcial.databinding.ActivityAdicionarProdutoBinding
 import com.google.android.material.snackbar.Snackbar
@@ -35,14 +37,14 @@ class AdicionarProdutoActivity : AppCompatActivity() {
 
         binding.spinnerUnidade.adapter = ArrayAdapter(
             this,
-            android.R.layout.simple_spinner_item,
-            resources.getStringArray(R.array.unidades)
+            R.layout.simple_spinner_item,
+            resources.getStringArray(com.example.projetoparcial.R.array.unidades)
         )
 
         binding.spinnerCategoria.adapter = ArrayAdapter(
             this,
-            android.R.layout.simple_spinner_item,
-            resources.getStringArray(R.array.categorias)
+            R.layout.simple_spinner_item,
+            resources.getStringArray(com.example.projetoparcial.R.array.categorias)
         )
 
         if (itemTitle.isNotEmpty()) {
@@ -50,7 +52,7 @@ class AdicionarProdutoActivity : AppCompatActivity() {
         }
 
         if (itemUnidade.isNotEmpty()) {
-            val unidades = resources.getStringArray(R.array.unidades)
+            val unidades = resources.getStringArray(com.example.projetoparcial.R.array.unidades)
             val posicao = unidades.indexOf(itemUnidade)
             if (posicao >= 0) {
                 binding.spinnerUnidade.setSelection(posicao)
@@ -58,7 +60,7 @@ class AdicionarProdutoActivity : AppCompatActivity() {
         }
 
         if (itemCategoria.isNotEmpty()) {
-            val categorias = resources.getStringArray(R.array.categorias)
+            val categorias = resources.getStringArray(com.example.projetoparcial.R.array.categorias)
             val posicao = categorias.indexOf(itemCategoria)
             if (posicao >= 0) {
                 binding.spinnerCategoria.setSelection(posicao)

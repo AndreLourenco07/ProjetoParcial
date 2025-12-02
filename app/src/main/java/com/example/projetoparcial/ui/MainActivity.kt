@@ -1,4 +1,4 @@
-package com.example.projetoparcial
+package com.example.projetoparcial.ui
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,38 +6,48 @@ import android.text.InputType
 import android.util.Patterns
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.edit
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.projetoparcial.databinding.ActivityMainBinding
+import com.example.projetoparcial.ui.viewmodel.LoginViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity() {
 
-    // Criar binding
     private lateinit var binding: ActivityMainBinding
-    private lateinit var firebaseAuth: FirebaseAuth
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        // Inflar o layout com ViewBinding
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        firebaseAuth = FirebaseAuth.getInstance()
+        setupUI()
+        observeUiState()
 
-        //Botao para acessar a tela de cadastro
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+    }
+
+    private fun setupUI() {
         binding.btnCadastro.setOnClickListener {
             val intent = Intent(this, CadastroContaActivity::class.java)
             startActivity(intent)
         }
 
-        //Botao para acessar com firebase
         binding.btnAcessar.setOnClickListener {
             val email = binding.edtEmail.text.toString().trim()
             val senha = binding.edtSenha.text.toString().trim()
@@ -50,25 +60,9 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.make(binding.root, "E-mail inválido!", Snackbar.LENGTH_SHORT).show()
                 }
                 else -> {
-                    firebaseAuth.signInWithEmailAndPassword(email, senha).addOnCompleteListener {
-                        if (it.isSuccessful){
-                            binding.edtEmail.setText("")
-                            binding.edtSenha.setText("")
-
-                            val intent = Intent(this, ListasActivity::class.java)
-                            startActivity(intent)
-                        }else{
-                            val mensagemErro = when (it.exception) {
-                                is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException ->
-                                    "E-mail ou senha incorretos!"
-                                is com.google.firebase.auth.FirebaseAuthInvalidUserException ->
-                                    "Usuário não encontrado!"
-                                else ->
-                                    "Erro ao fazer login. Tente novamente!"
-                            }
-                            Snackbar.make(binding.root, mensagemErro, Snackbar.LENGTH_SHORT).show()
-                        }
-                    }
+                    viewModel.onEmailChanged(email)
+                    viewModel.onPasswordChanged(senha)
+                    viewModel.onLoginClicked()
                 }
             }
         }
@@ -76,11 +70,26 @@ class MainActivity : AppCompatActivity() {
         binding.txtEsqueceuSenha.setOnClickListener {
             mostrarDialogoRedefinirSenha()
         }
+    }
 
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+    private fun observeUiState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    if (state.isSuccess) {
+                        binding.edtEmail.setText("")
+                        binding.edtSenha.setText("")
+                        val intent = Intent(this@MainActivity, ListasActivity::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+
+                    state.errorMessage?.let {
+                        Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
+                        viewModel.clearError()
+                    }
+                }
+            }
         }
     }
 
@@ -105,26 +114,7 @@ class MainActivity : AppCompatActivity() {
                     Snackbar.make(binding.root, "E-mail inválido!", Snackbar.LENGTH_SHORT).show()
                 }
                 else -> {
-                    firebaseAuth.sendPasswordResetEmail(email)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                Snackbar.make(
-                                    binding.root,
-                                    "Link de redefinição enviado para $email",
-                                    Snackbar.LENGTH_LONG
-                                ).show()
-                            } else {
-                                val mensagemErro = when (task.exception) {
-                                    is com.google.firebase.auth.FirebaseAuthInvalidUserException ->
-                                        "E-mail não encontrado!"
-                                    is com.google.firebase.auth.FirebaseAuthInvalidCredentialsException ->
-                                        "E-mail inválido!"
-                                    else ->
-                                        "Erro ao enviar e-mail. Tente novamente!"
-                                }
-                                Snackbar.make(binding.root, mensagemErro, Snackbar.LENGTH_SHORT).show()
-                            }
-                        }
+                    viewModel.onPasswordResetClicked(email)
                 }
             }
         }
@@ -135,17 +125,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-
-        // Verifica se o usuário já está autenticado
-        val usuarioAtual = firebaseAuth.currentUser
-
-        if (usuarioAtual != null) {
-            // Usuário já está logado, vai direto para ListasActivity
+        if (viewModel.checkIfUserIsLoggedIn()) {
             val intent = Intent(this, ListasActivity::class.java)
             startActivity(intent)
-            finish() // Fecha MainActivity para não voltar ao fazer back
+            finish()
         } else {
-            // Usuário não está logado, recupera os dados salvos
             val prefs = getSharedPreferences("login_temp", MODE_PRIVATE)
             binding.edtEmail.setText(prefs.getString("email", ""))
             binding.edtSenha.setText(prefs.getString("senha", ""))
@@ -154,7 +138,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStop() {
         super.onStop()
-        // Salva os dados temporários
         val prefs = getSharedPreferences("login_temp", MODE_PRIVATE)
         prefs.edit {
             putString("email", binding.edtEmail.text.toString())

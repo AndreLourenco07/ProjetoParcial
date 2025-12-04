@@ -5,17 +5,22 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.projetoparcial.BD
-import com.example.projetoparcial.data.model.ItemDados
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.projetoparcial.databinding.ActivityAdicionarProdutoBinding
+import com.example.projetoparcial.ui.viewmodel.AdicionarProdutoViewModel
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.coroutines.launch
 
 class AdicionarProdutoActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAdicionarProdutoBinding
-    private var idLista = ""
+    private val viewModel: AdicionarProdutoViewModel by viewModels()
 
+    private var idLista = ""
     private var itemId = ""
     private var itemTitle = ""
     private var itemCategoria = ""
@@ -26,6 +31,7 @@ class AdicionarProdutoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
+        // Pega os dados da intent
         idLista        = intent.getStringExtra("LIST_ID") ?: ""
         itemId         = intent.getStringExtra("ITEM_ID") ?: ""
         itemTitle      = intent.getStringExtra("ITEM_TITLE") ?: ""
@@ -36,6 +42,13 @@ class AdicionarProdutoActivity : AppCompatActivity() {
         binding = ActivityAdicionarProdutoBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        setupSpinners()
+        preencherCampos()
+        setupClickListeners()
+        observeUiState()
+    }
+
+    private fun setupSpinners() {
         binding.spinnerUnidade.adapter = ArrayAdapter(
             this,
             R.layout.simple_spinner_item,
@@ -47,7 +60,9 @@ class AdicionarProdutoActivity : AppCompatActivity() {
             R.layout.simple_spinner_item,
             resources.getStringArray(com.example.projetoparcial.R.array.categorias)
         )
+    }
 
+    private fun preencherCampos() {
         if (itemTitle.isNotEmpty()) {
             binding.edtNomeItem.setText(itemTitle)
         }
@@ -71,17 +86,61 @@ class AdicionarProdutoActivity : AppCompatActivity() {
         if (itemQuantidade > 0) {
             binding.edtQuantidade.setText(itemQuantidade.toString())
         }
+    }
 
+    private fun setupClickListeners() {
         binding.btnAdicionar.setOnClickListener {
-            val Quantidade = binding.edtQuantidade.text.toString().trim()
-            val NomeItem   = binding.edtNomeItem.text.toString().trim()
+            val nome = binding.edtNomeItem.text.toString().trim()
+            val quantidadeStr = binding.edtQuantidade.text.toString().trim()
 
             when {
-                Quantidade.isEmpty() || NomeItem.isEmpty() -> {
+                nome.isEmpty() || quantidadeStr.isEmpty() -> {
                     Snackbar.make(binding.root, "Preencha todos os campos!", Snackbar.LENGTH_SHORT).show()
-                }else -> {
-                salvarProduto()
+                }
+                else -> {
+                    val quantidade = quantidadeStr.toDoubleOrNull() ?: 1.0
+                    val unidade = binding.spinnerUnidade.selectedItem.toString()
+                    val categoria = binding.spinnerCategoria.selectedItem.toString()
+
+                    viewModel.salvarProduto(
+                        idLista = idLista,
+                        itemId = itemId,
+                        nome = nome,
+                        quantidade = quantidade,
+                        unidade = unidade,
+                        categoria = categoria
+                    )
+                }
             }
+        }
+    }
+
+    private fun observeUiState() {
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collect { state ->
+                    // Controla o loading
+                    if (state.isLoading) {
+                        mostrarLoading()
+                    } else {
+                        esconderLoading()
+                    }
+
+                    // Sucesso - volta para tela anterior
+                    if (state.isSaved) {
+                        val mensagem = if (itemId.isEmpty()) "Produto salvo!" else "Produto atualizado!"
+                        Snackbar.make(binding.root, mensagem, Snackbar.LENGTH_SHORT).show()
+                        viewModel.resetSavedState()
+                        setResult(RESULT_OK)
+                        finish()
+                    }
+
+                    // Mostra erro se houver
+                    state.errorMessage?.let { message ->
+                        Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
+                        viewModel.limparMensagens()
+                    }
+                }
             }
         }
     }
@@ -96,63 +155,5 @@ class AdicionarProdutoActivity : AppCompatActivity() {
         binding.btnAdicionar.isEnabled = true
         binding.btnAdicionar.text = if (itemId.isEmpty()) "Adicionar" else "Salvar"
         binding.progressBarProduto.visibility = View.GONE
-    }
-
-    private fun salvarProduto() {
-        val nomeProduto = binding.edtNomeItem.text.toString().trim()
-        val qtdProduto = binding.edtQuantidade.text.toString().toDoubleOrNull() ?: 1.0
-
-        val unidade = binding.spinnerUnidade.selectedItem.toString()
-        val categoria = binding.spinnerCategoria.selectedItem.toString()
-
-        if (nomeProduto.isEmpty()) {
-            Snackbar.make(binding.root, "Digite um nome do produto", Snackbar.LENGTH_SHORT).show()
-            return
-        }
-
-        if (idLista.isEmpty()) {
-            Snackbar.make(binding.root, "Erro: lista não identificada!", Snackbar.LENGTH_SHORT).show()
-            return
-        }
-
-        val item = ItemDados(
-            nome = nomeProduto,
-            quantidade = qtdProduto,
-            unidade = unidade,
-            categoria = categoria
-        )
-
-        mostrarLoading()
-
-        if (itemId.isEmpty()){
-            BD().salvarItemNaLista(
-                idLista = idLista,
-                item = item,
-                onSucesso = {
-                    esconderLoading()
-                    Snackbar.make(binding.root, "Produto salvo!", Snackbar.LENGTH_SHORT).show()
-                    finish()
-                },
-                onErro = {
-                    esconderLoading()
-                    Snackbar.make(binding.root, "Erro ao salvar produto: $it", Snackbar.LENGTH_SHORT).show()
-                }
-            )
-        }else{
-            BD().atualizarItemLista(
-                idLista = idLista,
-                idItem = itemId,
-                item = item,
-                onSucesso = {
-                    esconderLoading()
-                    Snackbar.make(binding.root, "Produto atualizado!", Snackbar.LENGTH_SHORT).show()
-                    finish()
-                },
-                onErro = {
-                    esconderLoading()
-                    Snackbar.make(binding.root, "Erro ao atualizar produto: $it", Snackbar.LENGTH_SHORT).show()
-                }
-            )
-        }
     }
 }

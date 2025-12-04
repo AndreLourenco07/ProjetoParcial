@@ -15,10 +15,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.projetoparcial.adapter.AdapterLista
 import com.example.projetoparcial.data.model.ListaDados
+import com.example.projetoparcial.data.repository.LoginRepository
 import com.example.projetoparcial.databinding.ActivityListasBinding
 import com.example.projetoparcial.ui.viewmodel.ListasViewModel
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
 class ListasActivity : AppCompatActivity() {
@@ -26,7 +26,7 @@ class ListasActivity : AppCompatActivity() {
     private lateinit var binding: ActivityListasBinding
     private val viewModel: ListasViewModel by viewModels()
     private lateinit var adapterLista: AdapterLista
-    private lateinit var firebaseAuth: FirebaseAuth
+    private val loginRepository = LoginRepository()
 
     private val addOrEditListLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -39,8 +39,6 @@ class ListasActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityListasBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        firebaseAuth = FirebaseAuth.getInstance()
 
         setupRecyclerView()
         setupBusca()
@@ -166,10 +164,13 @@ class ListasActivity : AppCompatActivity() {
     }
 
     private fun realizarLogout() {
-        firebaseAuth.signOut()
+        // Chama o logout através do repository
+        loginRepository.logout()
+
         Snackbar.make(binding.root, "Logout realizado com sucesso", Snackbar.LENGTH_SHORT).show()
 
         val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finish()
     }

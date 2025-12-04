@@ -24,19 +24,16 @@ class ItemRepository {
             val cacheValid = (lastUpdate + CACHE_EXPIRATION_TIME_MILLIS) > System.currentTimeMillis()
 
             if (cacheValid) {
-                return Result.success(memory.getItens(idLista)!!.sortedBy { it.concluido })
+                return Result.success(memory.getItens(idLista)!!)
             }
         }
 
         // Buscar do servidor
         return remote.lerItens(idLista).onSuccess { itens ->
             memory.saveItens(idLista, itens)
-        }.map { itens ->
-            itens.sortedBy { it.concluido }
         }.recoverCatching { exception ->
             // Se falhar e houver cache, retornar o cache
-            memory.getItens(idLista)?.sortedBy { it.concluido }
-                ?: throw exception
+            memory.getItens(idLista) ?: throw exception
         }
     }
 

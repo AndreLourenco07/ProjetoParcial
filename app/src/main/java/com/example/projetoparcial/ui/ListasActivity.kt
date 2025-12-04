@@ -164,7 +164,6 @@ class ListasActivity : AppCompatActivity() {
     }
 
     private fun realizarLogout() {
-        // Chama o logout através do repository
         loginRepository.logout()
 
         Snackbar.make(binding.root, "Logout realizado com sucesso", Snackbar.LENGTH_SHORT).show()

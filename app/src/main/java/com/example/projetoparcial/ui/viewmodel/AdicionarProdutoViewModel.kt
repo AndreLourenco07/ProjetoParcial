@@ -29,22 +29,6 @@ class AdicionarProdutoViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(AdicionarProdutoUiState())
     val uiState: StateFlow<AdicionarProdutoUiState> = _uiState.asStateFlow()
 
-    fun setNomeItem(nome: String) {
-        _uiState.update { it.copy(nomeItem = nome) }
-    }
-
-    fun setQuantidade(quantidade: Double) {
-        _uiState.update { it.copy(quantidade = quantidade) }
-    }
-
-    fun setUnidade(unidade: String) {
-        _uiState.update { it.copy(unidade = unidade) }
-    }
-
-    fun setCategoria(categoria: String) {
-        _uiState.update { it.copy(categoria = categoria) }
-    }
-
     fun salvarProduto(
         idLista: String,
         itemId: String,

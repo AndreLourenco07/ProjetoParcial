@@ -29,18 +29,15 @@ class AuthRemoteDataSource {
 
     suspend fun register(name: String, email: String, password: String): Result<String> {
         return try {
-            // 1. Cria usuário no Firebase Auth
             val authResult = firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             val uid = authResult.user?.uid
                 ?: return Result.failure(Exception("Erro ao criar usuário"))
 
-            // 2. Atualiza o displayName no Auth
             val profileUpdates = UserProfileChangeRequest.Builder()
                 .setDisplayName(name)
                 .build()
             authResult.user?.updateProfile(profileUpdates)?.await()
 
-            // 3. Salva dados no Firestore (coleção "usuarios")
             val dadosUsuario = hashMapOf(
                 "nome" to name,
                 "email" to email,

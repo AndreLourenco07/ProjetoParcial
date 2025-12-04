@@ -64,7 +64,6 @@ class ListasViewModel : ViewModel() {
         }
     }
 
-    // 🆕 FILTRO DE BUSCA
     fun buscarListas(termo: String) {
         _uiState.update {
             it.copy(

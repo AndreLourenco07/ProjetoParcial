@@ -47,7 +47,6 @@ class AdicionarListaViewModel : ViewModel() {
                 _uiState.update { it.copy(isLoading = true, errorMessage = null) }
             }
 
-            // Salvar imagem se houver
             val imageUrl = if (imageUri != null) {
                 repository.salvarImagem(imageUri).getOrElse { exception ->
                     withContext(Dispatchers.Main) {
@@ -64,7 +63,6 @@ class AdicionarListaViewModel : ViewModel() {
                 null
             }
 
-            // Criar/atualizar lista
             val novaLista = ListaDados(
                 nome = nome,
                 descricao = "",

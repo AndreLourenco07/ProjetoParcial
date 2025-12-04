@@ -69,7 +69,6 @@ class ItensViewModel : ViewModel() {
         }
     }
 
-    // 🆕 FILTRO DE BUSCA
     fun buscarItens(termo: String) {
         _uiState.update {
             it.copy(
@@ -79,7 +78,6 @@ class ItensViewModel : ViewModel() {
         }
     }
 
-    // 🆕 AGRUPAMENTO POR CATEGORIA
     private fun agruparEOrdenarItens(
         itens: List<ItemDados>,
         termo: String
@@ -96,12 +94,10 @@ class ItensViewModel : ViewModel() {
             }
         }
 
-        // Ordenar: não concluídos primeiro, depois por categoria e nome
         val itensOrdenados = itensFiltrados.sortedWith(
             compareBy({ it.concluido }, { it.categoria ?: "" }, { it.nome })
         )
 
-        // Agrupar por categoria
         return itensOrdenados.groupBy { it.categoria ?: "Sem categoria" }
     }
 

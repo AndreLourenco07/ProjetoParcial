@@ -71,12 +71,13 @@ class AdicionarListaActivity : AppCompatActivity() {
 
     private fun setupInitialData() {
         if (listId.isNotEmpty()) {
+            binding.txtTitulo.setText("Editar Lista")
             binding.edtNomeLista.setText(listTitle)
             viewModel.setNomeLista(listTitle)
 
-            // 🆕 MOSTRAR BOTÃO EXCLUIR
             binding.btnExcluir.visibility = View.VISIBLE
         } else {
+            binding.txtTitulo.setText("Adicionar Lista")
             binding.btnExcluir.visibility = View.GONE
         }
     }
@@ -131,18 +132,16 @@ class AdicionarListaActivity : AppCompatActivity() {
             viewModel.salvarLista(listId, nome, viewModel.uiState.value.imageUri)
         }
 
-        // 🆕 BOTÃO EXCLUIR
         binding.btnExcluir.setOnClickListener {
             showDeleteConfirmationDialog()
         }
     }
 
-    // 🆕 EXCLUIR LISTA
     private fun showDeleteConfirmationDialog() {
         AlertDialog.Builder(this)
-            .setTitle("Remover Lista")
-            .setMessage("Tem certeza de que deseja remover a lista '$listTitle'?")
-            .setPositiveButton("Remover") { _, _ ->
+            .setTitle("Excluir Lista")
+            .setMessage("Tem certeza de que deseja excluir a lista '$listTitle'?")
+            .setPositiveButton("Excluir") { _, _ ->
                 excluirLista()
             }
             .setNegativeButton("Cancelar", null)
@@ -153,19 +152,18 @@ class AdicionarListaActivity : AppCompatActivity() {
         binding.btnExcluir.isEnabled = false
 
         lifecycleScope.launch(Dispatchers.IO) {
-            repository.removerLista(listId)
+            repository.excluirLista(listId)
                 .onSuccess {
                     withContext(Dispatchers.Main) {
                         Snackbar.make(
                             binding.root,
-                            "Lista removida com sucesso",
+                            "Lista excluida com sucesso",
                             Snackbar.LENGTH_SHORT
                         ).show()
-                        setResult(RESULT_OK)
-                        finish()
-
-                        // Ir para ListasActivity
                         val intent = Intent(this@AdicionarListaActivity, ListasActivity::class.java)
+
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
+
                         startActivity(intent)
                     }
                 }

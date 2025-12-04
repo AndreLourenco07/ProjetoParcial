@@ -89,7 +89,7 @@ class ListasViewModel : ViewModel() {
                 _uiState.update { it.copy(isLoading = true) }
             }
 
-            repository.removerLista(lista.id)
+            repository.excluirLista(lista.id)
                 .onSuccess {
                     withContext(Dispatchers.Main) {
                         _uiState.update {

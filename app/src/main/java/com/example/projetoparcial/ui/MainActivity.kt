@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
 import android.util.Patterns
+import android.view.View
 import android.widget.EditText
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
@@ -76,6 +77,13 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
+
+                    if (state.isLoading) {
+                        mostrarLoading()
+                    } else {
+                        esconderLoading()
+                    }
+
                     if (state.isSuccess) {
                         binding.edtEmail.setText("")
                         binding.edtSenha.setText("")
@@ -91,6 +99,18 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun mostrarLoading() {
+        binding.btnAcessar.isEnabled = false
+        binding.btnAcessar.text = ""
+        binding.progressBarLogin.visibility = View.VISIBLE
+    }
+
+    private fun esconderLoading() {
+        binding.btnAcessar.isEnabled = true
+        binding.btnAcessar.text = "Acessar"
+        binding.progressBarLogin.visibility = View.GONE
     }
 
     private fun mostrarDialogoRedefinirSenha() {

@@ -80,15 +80,30 @@
                     android:inputType="textPassword"
                     android:padding="12dp" />
 
-                <Button
-                    android:id="@+id/btnAcessar"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:layout_marginBottom="12dp"
-                    android:background="@drawable/ic_button_acessar"
-                    android:text="Acessar"
-                    android:textColor="@android:color/white" />
+                    android:layout_marginBottom="12dp">
+
+                    <Button
+                        android:id="@+id/btnAcessar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/ic_button_acessar"
+                        android:backgroundTint="@null"
+                        android:text="Acessar"
+                        android:textColor="@android:color/white" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBarLogin"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_gravity="center"
+                        android:visibility="gone"
+                        android:indeterminateTint="@android:color/white" />
+
+                </FrameLayout>
 
                 <Button
                     android:id="@+id/btnCadastro"

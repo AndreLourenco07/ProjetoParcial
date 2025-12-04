@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Tema base da aplicação -->
-    <style name="Base.Theme.ProjetoParcial" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Base.Theme.ProjetoParcial" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Cores principais -->
         <item name="colorPrimary">@color/system</item>
         <item name="colorPrimaryVariant">@color/cinzaclaro</item>
@@ -9,6 +9,7 @@
 
         <!-- Para compatibilidade com views antigas -->
         <item name="colorAccent">@color/system</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
     <!-- Tema usado no Manifest -->

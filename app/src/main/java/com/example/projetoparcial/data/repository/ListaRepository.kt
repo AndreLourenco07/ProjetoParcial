@@ -51,8 +51,8 @@ class ListaRepository {
         }
     }
 
-    suspend fun removerLista(idLista: String): Result<Unit> {
-        return remote.removerLista(idLista).onSuccess {
+    suspend fun excluirLista(idLista: String): Result<Unit> {
+        return remote.excluirLista(idLista).onSuccess {
             memory.removeLista(idLista)
         }
     }

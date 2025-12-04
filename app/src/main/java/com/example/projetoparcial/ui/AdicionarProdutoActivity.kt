@@ -2,6 +2,7 @@ package com.example.projetoparcial.ui
 
 import android.R
 import android.os.Bundle
+import android.view.View
 import android.widget.ArrayAdapter
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -79,17 +80,28 @@ class AdicionarProdutoActivity : AppCompatActivity() {
                 Quantidade.isEmpty() || NomeItem.isEmpty() -> {
                     Snackbar.make(binding.root, "Preencha todos os campos!", Snackbar.LENGTH_SHORT).show()
                 }else -> {
-                    salvarProduto()
-                }
+                salvarProduto()
+            }
             }
         }
+    }
+
+    private fun mostrarLoading() {
+        binding.btnAdicionar.isEnabled = false
+        binding.btnAdicionar.text = ""
+        binding.progressBarProduto.visibility = View.VISIBLE
+    }
+
+    private fun esconderLoading() {
+        binding.btnAdicionar.isEnabled = true
+        binding.btnAdicionar.text = if (itemId.isEmpty()) "Adicionar" else "Salvar"
+        binding.progressBarProduto.visibility = View.GONE
     }
 
     private fun salvarProduto() {
         val nomeProduto = binding.edtNomeItem.text.toString().trim()
         val qtdProduto = binding.edtQuantidade.text.toString().toDoubleOrNull() ?: 1.0
 
-        // Pegar unidade e categoria dos componentes do XML
         val unidade = binding.spinnerUnidade.selectedItem.toString()
         val categoria = binding.spinnerCategoria.selectedItem.toString()
 
@@ -110,15 +122,19 @@ class AdicionarProdutoActivity : AppCompatActivity() {
             categoria = categoria
         )
 
+        mostrarLoading()
+
         if (itemId.isEmpty()){
             BD().salvarItemNaLista(
                 idLista = idLista,
                 item = item,
                 onSucesso = {
+                    esconderLoading()
                     Snackbar.make(binding.root, "Produto salvo!", Snackbar.LENGTH_SHORT).show()
                     finish()
                 },
                 onErro = {
+                    esconderLoading()
                     Snackbar.make(binding.root, "Erro ao salvar produto: $it", Snackbar.LENGTH_SHORT).show()
                 }
             )
@@ -128,10 +144,12 @@ class AdicionarProdutoActivity : AppCompatActivity() {
                 idItem = itemId,
                 item = item,
                 onSucesso = {
+                    esconderLoading()
                     Snackbar.make(binding.root, "Produto atualizado!", Snackbar.LENGTH_SHORT).show()
                     finish()
                 },
                 onErro = {
+                    esconderLoading()
                     Snackbar.make(binding.root, "Erro ao atualizar produto: $it", Snackbar.LENGTH_SHORT).show()
                 }
             )

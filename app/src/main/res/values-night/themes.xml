@@ -1,7 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <style name="Base.Theme.ProjetoParcial"
-        parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        parent="Theme.MaterialComponents.Light.NoActionBar">
+
+        <!-- Cores principais -->
+        <item name="colorPrimary">@color/system</item>
+        <item name="colorPrimaryVariant">@color/cinzaclaro</item>
+        <item name="colorOnPrimary">@android:color/white</item>
+
+        <!-- Para compatibilidade com views antigas -->
+        <item name="colorAccent">@color/system</item>
+
         <!-- customizações modo escuro, se quiser -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
     </style>
 
     <style name="Theme.ProjetoParcial" parent="Base.Theme.ProjetoParcial" />

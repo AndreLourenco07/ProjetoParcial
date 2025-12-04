@@ -39,7 +39,7 @@
                 <EditText
                     android:id="@+id/edtBuscarItem"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_weight="1"
                     android:hint="Buscar"
                     android:background="@android:color/transparent"
@@ -48,8 +48,8 @@
 
                 <ImageButton
                     android:id="@+id/imgBtnVoltar"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@drawable/ic_logout"
                     android:padding="8dp"
                     android:background="@android:color/transparent"

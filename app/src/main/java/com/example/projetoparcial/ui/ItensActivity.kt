@@ -141,14 +141,14 @@ class ItensActivity : AppCompatActivity() {
     }
 
     private fun showListOptionsDialog(item: ItemDados) {
-        val opcoes = arrayOf("Editar Item", "Remover Item")
+        val opcoes = arrayOf("Editar Item", "Excluir Item")
 
         android.app.AlertDialog.Builder(this)
             .setTitle(item.nome)
             .setItems(opcoes) { _, which ->
                 when (which) {
                     0 -> editarItem(item)
-                    1 -> mostrarDialogDeletar(item)
+                    1 -> mostrarDialogExcluir(item)
                 }
             }
             .show()
@@ -175,10 +175,10 @@ class ItensActivity : AppCompatActivity() {
         addOrEditItemLauncher.launch(intent)
     }
 
-    private fun mostrarDialogDeletar(item: ItemDados) {
+    private fun mostrarDialogExcluir(item: ItemDados) {
         AlertDialog.Builder(this)
-            .setTitle("Deletar Item")
-            .setMessage("Deseja realmente deletar ${item.nome}?")
+            .setTitle("Excluir Item")
+            .setMessage("Deseja realmente excluir ${item.nome}?")
             .setPositiveButton("Sim") { _, _ ->
                 viewModel.removerItem(item)
             }

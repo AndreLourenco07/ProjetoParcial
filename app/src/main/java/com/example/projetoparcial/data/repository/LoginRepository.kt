@@ -15,6 +15,10 @@ class LoginRepository {
 
     fun isUserLoggedIn() = authRemoteDatasource.getCurrentUser() != null
 
+    suspend fun register(name: String, email: String, password: String): Result<String> {
+        return authRemoteDatasource.register(name, email, password)
+    }
+
     fun logout() {
         authRemoteDatasource.logout()
     }

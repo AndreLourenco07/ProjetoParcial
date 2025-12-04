@@ -72,7 +72,6 @@ class ListasActivity : AppCompatActivity() {
         binding.recyclerViewListas.adapter = adapterLista
     }
 
-    // 🆕 CONFIGURAR BUSCA
     private fun setupBusca() {
         binding.edtBuscarItem.addTextChangedListener { texto ->
             val termo = texto.toString().trim()
@@ -84,19 +83,15 @@ class ListasActivity : AppCompatActivity() {
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collect { state ->
-                    // Atualizar lista (usa listasFiltradas)
                     adapterLista.updateLists(state.listasFiltradas)
 
-                    // Atualizar botão
                     binding.btnAddLista.isEnabled = !state.isLoading
 
-                    // Mensagens de erro
                     state.errorMessage?.let { message ->
                         Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG).show()
                         viewModel.limparMensagens()
                     }
 
-                    // Mensagens de sucesso
                     state.successMessage?.let { message ->
                         Snackbar.make(binding.root, message, Snackbar.LENGTH_SHORT).show()
                         viewModel.limparMensagens()
@@ -112,7 +107,6 @@ class ListasActivity : AppCompatActivity() {
             addOrEditListLauncher.launch(intent)
         }
 
-        // 🆕 BOTÃO LOGOUT
         binding.imgBtnVoltar.setOnClickListener {
             mostrarDialogoLogout()
         }
@@ -127,7 +121,7 @@ class ListasActivity : AppCompatActivity() {
     }
 
     private fun showListOptionsDialog(list: ListaDados) {
-        val opcoes = arrayOf("Editar Lista", "Remover Lista")
+        val opcoes = arrayOf("Editar Lista", "Excluir Lista")
 
         AlertDialog.Builder(this)
             .setTitle(list.nome)
@@ -151,16 +145,15 @@ class ListasActivity : AppCompatActivity() {
 
     private fun showDeleteConfirmationDialog(list: ListaDados) {
         AlertDialog.Builder(this)
-            .setTitle("Remover Lista")
-            .setMessage("Tem certeza de que deseja remover a lista '${list.nome}'?")
-            .setPositiveButton("Remover") { _, _ ->
+            .setTitle("Excluir Lista")
+            .setMessage("Tem certeza de que deseja excluir a lista '${list.nome}'?")
+            .setPositiveButton("Excluir") { _, _ ->
                 viewModel.removerLista(list)
             }
             .setNegativeButton("Cancelar", null)
             .show()
     }
 
-    // 🆕 LOGOUT
     private fun mostrarDialogoLogout() {
         AlertDialog.Builder(this)
             .setTitle("Logout")
